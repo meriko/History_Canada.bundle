@@ -22,5 +22,16 @@
     <string>1</string>
     <key>PlexClientPlatforms</key> 
     <string>MacOSX</string>
+    <key>PlexPluginRegions</key>
+      <array>
+	<string>CA</string>
+      </array>
+    <key>PlexClientCapabilities</key>
+      <dict>
+	<key>protocols</key>
+	  <array>
+	    <string>webkit</string>
+	  </array>
+      </dict>
   </dict>
 </plist>
