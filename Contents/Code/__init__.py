@@ -57,14 +57,14 @@ def MainMenu():
                 if showList[title]:
                     discard = dir.Pop(showList[title]['index'])
                     #Log('Removed: %s' %discard.title)
-                    dir.Append(Function(DirectoryItem(SeasonsPage, title, thumb=sender.thumb), network=network))
+                    dir.Append(Function(DirectoryItem(SeasonsPage, title), network=network))
                 else:
                     pass
             except:
                 #Log('showList does not contain %s' % title)
                 showList[title] = {'id':id, 'index':showCount}
                 showCount +=1
-                dir.Append(Function(DirectoryItem(VideosPage, title, thumb=sender.thumb), pid=network[0], id=id))
+                dir.Append(Function(DirectoryItem(VideosPage, title), pid=network[0], id=id))
                 
     dir.Sort('title')
     
