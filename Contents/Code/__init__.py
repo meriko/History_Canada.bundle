@@ -145,7 +145,7 @@ def VideosPage(pid, iid):
 					title = title,
 					summary=summary,
 					duration=duration,
-						thumb = Resource.ContentsOfURLWithFallback(url=thumb_url, fallback=ICON),
+					thumb = Resource.ContentsOfURLWithFallback(url=thumb_url, fallback=ICON),
 					originally_available_at = originally_available_at,
 	 				season = seasonint,
 	 				index = episodeint
