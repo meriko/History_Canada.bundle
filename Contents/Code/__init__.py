@@ -61,7 +61,7 @@ def LoadShowList(cats):
 						DirectoryObject(
 							key = Callback(SeasonsPage, cats=cats, network=network, showtitle=title),
 							title = title, 
-							thumb = Resource.ContentsOfURLWithFallback(url=thumb_url, fallback='icon-default.png')
+							thumb = Resource.ContentsOfURLWithFallback(url=thumb_url, fallback=ICON)
 						)
 					)
 			else:
@@ -71,7 +71,7 @@ def LoadShowList(cats):
 						DirectoryObject(
 							key = Callback(VideosPage, pid=network[0], iid=iid),
 							title = title,
-							thumb = Resource.ContentsOfURLWithFallback(url=thumb_url, fallback='icon-default.png')
+							thumb = Resource.ContentsOfURLWithFallback(url=thumb_url, fallback=ICON)
 						)
 					)
 
@@ -145,7 +145,7 @@ def VideosPage(pid, iid):
 					title = title,
 					summary=summary,
 					duration=duration,
-						thumb = Resource.ContentsOfURLWithFallback(url=thumb_url, fallback='icon-default.png'),
+						thumb = Resource.ContentsOfURLWithFallback(url=thumb_url, fallback=ICON),
 					originally_available_at = originally_available_at,
 	 				season = seasonint,
 	 				index = episodeint
@@ -161,7 +161,7 @@ def VideosPage(pid, iid):
 					title = title,
 					summary=summary,
 					duration=duration,
-					thumb = Resource.ContentsOfURLWithFallback(url=thumb_url, fallback='icon-default.png'),
+					thumb = Resource.ContentsOfURLWithFallback(url=thumb_url, fallback=ICON),
 					originally_available_at = originally_available_at
 				)
 			)
@@ -200,7 +200,7 @@ def SeasonsPage(cats, network, showtitle):
 				DirectoryObject(
 					key = Callback(VideosPage, pid=network[0], iid=iid),
 					title = title,
-					thumb = Resource.ContentsOfURLWithFallback(url=thumb_url, fallback='icon-default.png')
+					thumb = Resource.ContentsOfURLWithFallback(url=thumb_url, fallback=ICON)
 				)
 			)
 
