@@ -3,10 +3,10 @@ ART = 'art-default.jpg'
 ICON = 'icon-default.png'
 HISTORY_PARAMS = ["IX_AH1EK64oFyEbbwbGHX2Y_2A_ca8pk", "z/History%20Player%20-%20Video%20Center"]
 FEED_LIST = "http://feeds.theplatform.com/ps/JSON/PortalService/2.2/getCategoryList?PID=%s&startIndex=1&endIndex=500&query=hasReleases&query=CustomText|PlayerTag|%s&field=airdate&field=fullTitle&field=author&field=description&field=PID&field=thumbnailURL&field=title&contentCustomField=title&field=ID&field=parent"
-FEEDS_LIST = "http://feeds.theplatform.com/ps/JSON/PortalService/2.2/getReleaseList?PID=%s&startIndex=1&endIndex=500&query=categoryIDs|%s&query=BitrateEqualOrGreaterThan|400000&query=BitrateLessThan|601000&sortField=airdate&sortDescending=true&field=airdate&field=author&field=description&field=length&field=PID&field=thumbnailURL&field=title&contentCustomField=title&contentCustomField=Episode&contentCustomField=Season"
+FEEDS_LIST = "http://feeds.theplatform.com/ps/JSON/PortalService/2.2/getReleaseList?PID=%s&startIndex=1&endIndex=500&query=categoryIDs|%s&sortField=airdate&sortDescending=true&field=airdate&field=author&field=description&field=length&field=PID&field=thumbnailURL&field=title&contentCustomField=title&contentCustomField=Episode&contentCustomField=Season"
 DIRECT_FEED = "http://release.theplatform.com/content.select?format=SMIL&pid=%s&UserName=Unknown&Embedded=True&TrackBrowser=True&Tracking=True&TrackLocation=True"
 LOADCATS = { 
-	'full':["Full Episodes"]
+	'full':['Full Episodes']
 	}
 RE_SEASON_TEST=Regex("S([0-9]+)$")
 
@@ -49,7 +49,7 @@ def LoadShowList(cats):
 	
 	for item in content['items']:
 		if WantedCats(item['title'],cats):
-			title = item['parent'].split('/')[1]
+			title = item['fullTitle'].split('/')[1]
 			thumb_url = item['thumbnailURL']
 			iid = item['ID']
 
@@ -61,7 +61,7 @@ def LoadShowList(cats):
 						DirectoryObject(
 							key = Callback(SeasonsPage, cats=cats, network=network, showtitle=title),
 							title = title, 
-							thumb = Resource.ContentsOfURLWithFallback(url=thumb_url, fallback=R(ICON))
+							thumb = Resource.ContentsOfURLWithFallback(url=thumb_url, fallback='icon-default.png')
 						)
 					)
 			else:
@@ -71,7 +71,7 @@ def LoadShowList(cats):
 						DirectoryObject(
 							key = Callback(VideosPage, pid=network[0], iid=iid),
 							title = title,
-							thumb = Resource.ContentsOfURLWithFallback(url=thumb_url, fallback=R(ICON))
+							thumb = Resource.ContentsOfURLWithFallback(url=thumb_url, fallback='icon-default.png')
 						)
 					)
 
@@ -85,6 +85,7 @@ def LoadShowList(cats):
 def VideoParse(pid):
 
 	videosmil = HTTP.Request(DIRECT_FEED % pid).content
+	Log(videosmil)
 	player = videosmil.split("ref src")
 	player = player[2].split('"')
 	if ".mp4" in player[1]:
@@ -111,7 +112,6 @@ def VideoParse(pid):
 ####################################################################################################
 
 def VideosPage(pid, iid):
-	Log("Gerk: Videos Page Here")
 
 	oc = ObjectContainer(
 		view_group="InfoList"
@@ -145,7 +145,7 @@ def VideosPage(pid, iid):
 					title = title,
 					summary=summary,
 					duration=duration,
-					thumb = Resource.ContentsOfURLWithFallback(url=thumb_url, fallback=R(ICON)),
+						thumb = Resource.ContentsOfURLWithFallback(url=thumb_url, fallback='icon-default.png'),
 					originally_available_at = originally_available_at,
 	 				season = seasonint,
 	 				index = episodeint
@@ -161,7 +161,7 @@ def VideosPage(pid, iid):
 					title = title,
 					summary=summary,
 					duration=duration,
-					thumb = Resource.ContentsOfURLWithFallback(url=thumb_url, fallback=R(ICON)),
+					thumb = Resource.ContentsOfURLWithFallback(url=thumb_url, fallback='icon-default.png'),
 					originally_available_at = originally_available_at
 				)
 			)
@@ -175,24 +175,24 @@ def SeasonsPage(cats, network, showtitle):
 		view_group="List"
 	)
 	content = JSON.ObjectFromURL(FEED_LIST % (network[0], network[1]))
-
+	#Log(content)
+	
 	for item in content['items']:
-		if showtitle in item['fullTitle']:
-			title = item['fullTitle']
-			title = title.split('/')[-1]
+		if showtitle in item['parent']:
+			title = item['fullTitle'].split('/')[-1]
 			iid = item['ID']
 			thumb_url = item['thumbnailURL']
-
+			Log('Gerk: fullTitle: %s',item['fullTitle'])
 			# Let's remove 'Full Episodes' from the default title
 			# and change S# into Season # where applicable
-			if ('Full Episodes' in title):
+			if ('Full Episodes' in item['fullTitle']):
 				try:
 					title = "Season " + RE_SEASON_TEST.search(item['title']).group(1)
 				except:
 					title = title
 			else:
 				try:
-					title = title.split('-')[0] + "- Season " + RE_SEASON_TEST.search(item['title']).group(1)
+					title = "Season " + RE_SEASON_TEST.search(item['title']).group(1) + " - " + title.split('-')[0] 
 				except:
 					title = title
 
@@ -200,7 +200,7 @@ def SeasonsPage(cats, network, showtitle):
 				DirectoryObject(
 					key = Callback(VideosPage, pid=network[0], iid=iid),
 					title = title,
-					thumb = Resource.ContentsOfURLWithFallback(url=thumb_url, fallback=R(ICON))
+					thumb = Resource.ContentsOfURLWithFallback(url=thumb_url, fallback='icon-default.png')
 				)
 			)
 
@@ -210,7 +210,7 @@ def SeasonsPage(cats, network, showtitle):
 	
 ####################################################################################################
 def WantedCats(thisShow,cats):
-
+	
 	for show in LOADCATS[cats]:
 		if show in thisShow:
 			return 1				
