@@ -9,6 +9,7 @@ LOADCATS = {
 	'full':['Full Episodes']
 	}
 RE_SEASON_TEST=Regex("S([0-9]+)$")
+VIDEO_URL = 'http://www.history.ca/video/?releasePID=%s'
 
 ####################################################################################################
 
@@ -140,8 +141,9 @@ def VideosPage(pid, iid):
 
 			oc.add(
 				EpisodeObject(
-					key = Callback(VideoParse, pid=pid),
-					rating_key = pid, 
+					# key = Callback(VideoParse, pid=pid),
+					# rating_key = pid, 
+					url = VIDEO_URL % pid,
 					title = title,
 					summary=summary,
 					duration=duration,
@@ -182,7 +184,7 @@ def SeasonsPage(cats, network, showtitle):
 			title = item['fullTitle'].split('/')[-1]
 			iid = item['ID']
 			thumb_url = item['thumbnailURL']
-			Log('Gerk: fullTitle: %s',item['fullTitle'])
+
 			# Let's remove 'Full Episodes' from the default title
 			# and change S# into Season # where applicable
 			if ('Full Episodes' in item['fullTitle']):
