@@ -141,8 +141,6 @@ def VideosPage(pid, iid):
 
 			oc.add(
 				EpisodeObject(
-					# key = Callback(VideoParse, pid=pid),
-					# rating_key = pid, 
 					url = VIDEO_URL % pid,
 					title = title,
 					summary=summary,
