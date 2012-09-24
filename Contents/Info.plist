@@ -4,15 +4,10 @@
 <dict>
 	<key>CFBundleIdentifier</key>
 	<string>com.plexapp.plugins.historycanada</string>
-	<key>PlexClientCapabilities</key>
-	<dict>
-		<key>protocols</key>
-		<array>
-			<string>webkit</string>
-		</array>
-	</dict>
-	<key>PlexClientPlatformExclusions</key>
-	<string>Roku</string>
+	<key>PlexFrameworkFlags</key>
+	<array>
+		<string>UseRealRTMP</string>
+	</array>
 	<key>PlexClientPlatforms</key>
 	<string>*</string>
 	<key>PlexFrameworkVersion</key>
